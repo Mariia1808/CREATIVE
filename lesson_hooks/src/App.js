@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 class CustomTextInput extends React.Component {
     constructor(props) {
@@ -12,6 +12,8 @@ class CustomTextInput extends React.Component {
       this.textInput.current.focus();
       this.textInput.current.type === "text"? this.textInput.current.type = "password": this.textInput.current.type = "text"
     }
+
+   
   
     render() {
       return (
@@ -25,12 +27,12 @@ class CustomTextInput extends React.Component {
             type="password"
             value="покус"
             ref={this.textInput} />
-  
-          
         </div>
       );
     }
   }
+
+ 
 
 class Time extends React.Component {
     state = {
@@ -61,10 +63,29 @@ class Time extends React.Component {
     }
 }
 
+function UserForm() {
+    const nameField = React.useRef(null);
+    const bool = useMemo(() => {
+        return nameField.current.type==='text' ? nameField.current.type='password' : nameField.current.type='text';
+      }, nameField.current.type);
+    const send = () => {
+      const inputElement = nameField.current;
+      inputElement.focus()
+      console.log(bool)
+    };
+    return (
+      <div>
+        <input type="text" ref={nameField} />
+        <button onClick={useCallback(() => send())}>Отправить</button>
+      </div>
+    );
+  }
+
 function App() {
   return (
     <div className="App div">
         <CustomTextInput/>
+        <UserForm/>
         <Time/>
     </div>
   );
